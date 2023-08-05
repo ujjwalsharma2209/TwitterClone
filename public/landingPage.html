@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Landing Page</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+      * {
+        font-family: "Poppins";
+      }
+
+      body {
+        background-color: #f5f8fa;
+        color: #444;
+      }
+
+      .navbar {
+        background-color: #fff;
+        border-bottom: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+      }
+
+      .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #1da1f2;
+      }
+
+      .form-control {
+        border-radius: 1rem;
+        padding: 1.3rem 1rem;
+        border: none;
+        box-shadow: none;
+        background-color: #f5f8fa;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .btn-primary {
+        border-radius: 2rem;
+        background-color: #1da1f2;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+        color: #fff;
+        width: 100%;
+        transition: all 0.2s ease-in-out;
+      }
+
+      .btn-primary:hover {
+        background-color: #0f81bd;
+      }
+
+      .card {
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 2rem auto;
+        max-width: 30rem;
+        padding: 2rem;
+      }
+
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      .card-text {
+        margin-bottom: 1.5rem;
+      }
+
+      .text-muted {
+        color: #999;
+      }
+
+      .error-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+      }
+
+      .success-message {
+        color: #28a745;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a class="navbar-brand" href="#">Twitter</a>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-title">Login</div>
+            <div class="card-body">
+              <form id="login-form">
+                <div class="form-group">
+                  <label for="login-email-username">Email / Username</label>
+                  <input
+                    name="emailOrUsername"
+                    type="text"
+                    class="form-control"
+                    id="login-email-username"
+                    placeholder="Enter email or username"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="login-password">Password</label>
+                  <input
+                    name="password"
+                    type="password"
+                    class="form-control"
+                    id="login-password"
+                    placeholder="Enter password"
+                  />
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-title">Register</div>
+            <div class="card-body">
+              <form id="register-form">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input
+                    name="name"
+                    class="form-control"
+                    id="name"
+                    placeholder="Enter name"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input
+                    name="email"
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="Enter email"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input
+                    name="username"
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    placeholder="Enter username"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input
+                    name="password"
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="Enter password"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="confirm-password">Confirm Password</label>
+                  <input
+                    name="confirmPassword"
+                    type="password"
+                    class="form-control"
+                    id="confirm-password"
+                    placeholder="Enter password again"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="date-of-birth">Date of Birth</label>
+                  <input
+                    name="dob"
+                    type="date"
+                    class="form-control"
+                    id="date-of-birth"
+                    min="01/01/1900"
+                    max="01/01/2010"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="gender">Gender</label><br />
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="gender"
+                      id="male"
+                      value="male"
+                      checked
+                    />
+                    <label class="form-check-label" for="male">Male</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="gender"
+                      id="female"
+                      value="female"
+                    />
+                    <label class="form-check-label" for="female">Female</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="gender"
+                      id="other"
+                      value="female"
+                    />
+                    <label class="form-check-label" for="other">Other</label>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function loginUser(emailOrUsername, password) {
+        fetch("/landing-page/login", {
+          method: "POST",
+          body: JSON.stringify({
+            emailOrUsername,
+            password,
+          }),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            localStorage.setItem("user", JSON.stringify(data));
+            window.location.href = "/home-page";
+          })
+          .catch((error) => console.log(error));
+      }
+
+      function registerUser(name, email, username, password, dob, gender) {
+        fetch("/landing-page/register", {
+          method: "POST",
+          body: JSON.stringify({
+            name,
+            email,
+            username,
+            password,
+            dob,
+            gender,
+          }),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert("User Registered Successuflly");
+            console.log(data);
+            window.location.reload();
+          })
+          .catch((error) => console.log(error));
+      }
+
+      const loginForm = document.querySelector("#login-form");
+      loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const emailOrUsername = loginForm.elements.emailOrUsername.value;
+        const password = loginForm.elements.password.value;
+        loginUser(emailOrUsername, password);
+      });
+
+      const registerForm = document.querySelector("#register-form");
+      registerForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const name = registerForm.elements.name.value;
+        const email = registerForm.elements.email.value;
+        const username = registerForm.elements.username.value;
+        const password = registerForm.elements.password.value;
+        const dob = registerForm.elements.dob.value;
+        const gender = registerForm.elements.gender.value.toUpperCase();
+        registerUser(name, email, username, password, dob, gender);
+      });
+    </script>
+  </body>
+</html>

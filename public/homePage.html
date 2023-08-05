@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+      * {
+        font-family: "Poppins";
+      }
+
+      textarea {
+        outline: none !important;
+      }
+
+      .navbar {
+        background-color: #fff;
+        border-bottom: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+      }
+
+      .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #1da1f2;
+      }
+
+      .form-inline {
+        display: inline-block;
+        margin-right: 1rem;
+      }
+
+      .form-control {
+        border-radius: 1rem;
+        padding: 0.5rem 1rem;
+        border: none;
+        box-shadow: none;
+        background-color: #f5f8fa;
+      }
+
+      .btn-primary {
+        background-color: #1da1f2;
+        border: none;
+        border-radius: 2rem;
+        padding: 0.5rem 1rem;
+        font-weight: bold;
+      }
+
+      .navbar-nav {
+        margin-left: auto;
+      }
+
+      .nav-link {
+        color: #333;
+        font-weight: bold;
+        margin-left: 1rem;
+      }
+
+      .tweet-box {
+        background-color: #f5f5f5;
+        padding: 20px;
+      }
+
+      .tweet {
+        margin-bottom: 20px;
+      }
+
+      .tweet-likes {
+        color: red;
+      }
+
+      .comment {
+        margin-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="/home-page">Twitter</a>
+
+        <form class="form-inline">
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Search"
+            id="search-input"
+          />
+          <button class="btn btn-primary" type="submit" id="search-button">
+            Search
+          </button>
+        </form>
+
+        <div class="collapse navbar-collapse justify-content-end">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Edit Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="logout">Logout</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Change Password</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-header">
+              <span class="font-weight-bold" id="username">Username</span>
+            </div>
+            <div class="card-body">
+              <ul class="list-group" id="followings">
+                <li class="list-group-item">Following:</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6" id="content">
+          <div class="card tweet-box">
+            <form id="tweet-form">
+              <div class="form-group">
+                <textarea
+                  name="tweetContent"
+                  class="form-control"
+                  rows="3"
+                  placeholder="What's happening?"
+                ></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Tweet</button>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-header">
+              <span class="font-weight-bold">Trending</span>
+            </div>
+            <div class="card-body">
+              <ul class="list-group" id="top-tags"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function getTweetLikes(id) {
+        return fetch(`/home-page/get-tweet-likes/${id}`)
+          .then((response) => response.json())
+          .then((data) => data)
+          .catch((error) => console.error(error));
+      }
+
+      function getTweetComments(id) {
+        return fetch(`/home-page/get-tweet-comments/${id}`)
+          .then((response) => response.json())
+          .then((data) => data)
+          .catch((error) => console.error(error));
+      }
+
+      function tweet(id, content) {
+        fetch("/home-page/tweet", {
+          method: "POST",
+          body: JSON.stringify({
+            user_id: id,
+            tweet_content: content,
+          }),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function likeTweet(id, user_id) {
+        fetch("/home-page/like-tweet", {
+          method: "POST",
+          body: JSON.stringify({
+            tweet_id: id,
+            user_id: user_id,
+          }),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            window.location.reload();
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function commentTweet(id, user_id, content) {
+        fetch("/home-page/comment-tweet", {
+          method: "POST",
+          body: JSON.stringify({
+            tweet_id: id,
+            user_id: user_id,
+            content: content,
+          }),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            window.location.reload();
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function getTopTags() {
+        return fetch(`/home-page/top-tags`)
+          .then((response) => response.json())
+          .then((tags) => {
+            tags.map((tag) => {
+              const listItem = document.createElement("li");
+              listItem.className = "list-group-item";
+              listItem.innerText = tag.content;
+              document.getElementById("top-tags").appendChild(listItem);
+            });
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function getFollowings(id) {
+        fetch(`/home-page/get-followings/${id}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const followings = document.getElementById("followings");
+            data.map((user) => {
+              const li = document.createElement("li");
+              li.classList.add("list-group-item");
+              li.textContent = user.name;
+              followings.appendChild(li);
+            });
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function getFollowingsTweets(id) {
+        fetch(`/home-page/get-followings-tweets/${id}`)
+          .then((response) => response.json())
+          .then((tweets) => {
+            tweets.map(async (tweet) => {
+              const likeData = await getTweetLikes(tweet.id);
+              const commentData = await getTweetComments(tweet.id);
+              const row = await createTweetRow(
+                tweet.id,
+                tweet.name,
+                tweet.username,
+                tweet.tweet_content,
+                likeData[0].likes,
+                commentData.length,
+                commentData
+              );
+              await document.getElementById("content").appendChild(row);
+            });
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function createTweetRow(
+        id,
+        name,
+        username,
+        tweetContent,
+        tweetLikes,
+        commentCount,
+        comments
+      ) {
+        const tweetDiv = document.createElement("div");
+        tweetDiv.className = "card tweet my-4";
+        const cardBodyDiv = document.createElement("div");
+        cardBodyDiv.className = "card-body";
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "row";
+        const avatarDiv = document.createElement("div");
+        avatarDiv.className = "col-md-2";
+        const avatarImg = document.createElement("img");
+        avatarImg.src = "https://via.placeholder.com/50x50";
+        avatarImg.alt = "User avatar";
+        avatarDiv.appendChild(avatarImg);
+        rowDiv.appendChild(avatarDiv);
+        const tweetDetailsDiv = document.createElement("div");
+        tweetDetailsDiv.className = "col-md-10";
+        const usernameSpanBold = document.createElement("span");
+        usernameSpanBold.className = "font-weight-bold";
+        usernameSpanBold.textContent = name + " ";
+        const usernameSpan = document.createElement("span");
+        usernameSpan.textContent = "@" + username;
+        const tweetText = document.createElement("p");
+        tweetText.textContent = tweetContent;
+        const tweetLikesSpan = document.createElement("span");
+        tweetLikesSpan.className = "tweet-likes";
+        tweetLikesSpan.innerHTML = `<i class="fa fa-heart"></i> ${tweetLikes}`;
+        tweetLikesSpan.addEventListener("mouseenter", function () {
+          this.style.cursor = "pointer";
+        });
+        tweetLikesSpan.addEventListener("mouseleave", function () {
+          this.style.cursor = "auto";
+        });
+        tweetLikesSpan.addEventListener("click", () => likeTweet(id, user.id));
+        const commentLink = document.createElement("span");
+        commentLink.style.color = "#1da1f2";
+        commentLink.className = "comment";
+        commentLink.innerHTML = `<i class="fa fa-comment"></i> ${commentCount}`;
+        tweetDetailsDiv.appendChild(usernameSpanBold);
+        tweetDetailsDiv.appendChild(usernameSpan);
+        tweetDetailsDiv.appendChild(tweetText);
+        tweetDetailsDiv.appendChild(tweetLikesSpan);
+        tweetDetailsDiv.appendChild(commentLink);
+        rowDiv.appendChild(tweetDetailsDiv);
+        cardBodyDiv.appendChild(rowDiv);
+        tweetDiv.appendChild(cardBodyDiv);
+        const cardFooterDiv = document.createElement("div");
+        cardFooterDiv.className = "card-footer";
+        const form = document.createElement("form");
+        const formGroupDiv = document.createElement("div");
+        formGroupDiv.className = "form-group";
+        const commentTextarea = document.createElement("textarea");
+        commentTextarea.className = "form-control";
+        commentTextarea.rows = "2";
+        commentTextarea.placeholder = "Add a comment";
+        formGroupDiv.appendChild(commentTextarea);
+        form.appendChild(formGroupDiv);
+        const commentBtn = document.createElement("button");
+        commentBtn.type = "submit";
+        commentBtn.className = "btn btn-primary btn-sm";
+        commentBtn.textContent = "Comment";
+        commentBtn.addEventListener("click", function (event) {
+          event.preventDefault();
+          const commentText = commentTextarea.value;
+          commentTweet(id, user.id, commentText);
+        });
+        form.appendChild(commentBtn);
+        cardFooterDiv.appendChild(form);
+        const hr = document.createElement("hr");
+        cardFooterDiv.appendChild(hr);
+        const commentsDiv = document.createElement("div");
+        commentsDiv.className = "comments";
+        comments.map((comment) => {
+          const commentDiv = document.createElement("div");
+          commentDiv.className = "comment";
+          const commentRowDiv = document.createElement("div");
+          commentRowDiv.className = "row";
+          const commentAvatarDiv = document.createElement("div");
+          commentAvatarDiv.className = "col-md-2";
+          const commentAvatarImg = document.createElement("img");
+          commentAvatarImg.src = "https://via.placeholder.com/50x50";
+          commentAvatarImg.alt = "User avatar";
+          commentAvatarDiv.appendChild(commentAvatarImg);
+          commentRowDiv.appendChild(commentAvatarDiv);
+          const commentDetailsDiv = document.createElement("div");
+          commentDetailsDiv.className = "col-md-10";
+          const commentUsernameSpanBold = document.createElement("span");
+          commentUsernameSpanBold.className = "font-weight-bold";
+          commentUsernameSpanBold.textContent = comment.name + " ";
+          const commentUsernameSpan = document.createElement("span");
+          commentUsernameSpan.textContent = "@" + comment.username;
+          const commentText = document.createElement("p");
+          commentText.textContent = comment.content;
+          commentDetailsDiv.appendChild(commentUsernameSpanBold);
+          commentDetailsDiv.appendChild(commentUsernameSpan);
+          commentDetailsDiv.appendChild(commentText);
+          commentRowDiv.appendChild(commentDetailsDiv);
+          commentDiv.appendChild(commentRowDiv);
+          commentsDiv.appendChild(commentDiv);
+        });
+        cardFooterDiv.appendChild(commentsDiv);
+        tweetDiv.appendChild(cardFooterDiv);
+        return tweetDiv;
+      }
+
+      const user = JSON.parse(localStorage.getItem("user"));
+      document.getElementById("username").innerText = user.username;
+
+      const logout = document.getElementById("logout");
+      logout.addEventListener("click", function () {
+        localStorage.removeItem("user");
+        window.location.href = "/landing-page";
+      });
+
+      const tweetForm = document.getElementById("tweet-form");
+      tweetForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const tweet_content = tweetForm.elements.tweetContent.value;
+        tweet(user.id, tweet_content);
+        window.location.reload();
+      });
+
+      const searchButton = document.getElementById("search-button");
+      searchButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        const searchInput = document.getElementById("search-input");
+        window.location.href = `/search-page?search=${searchInput.value}`;
+      });
+
+      getFollowings(user.id);
+      getFollowingsTweets(user.id);
+      getTopTags();
+    </script>
+  </body>
+</html>
